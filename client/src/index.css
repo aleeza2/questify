@@ -14,3 +14,19 @@ body {
   background-size: cover;
   background-repeat: repeat;
 }
+
+/* BG pulse on right/wrong (affects parchment only) */
+body.bg-pulse-green { background-color: #d1fae5 !important; transition: background-color 180ms ease; }
+body.bg-pulse-red   { background-color: #fee2e2 !important; transition: background-color 180ms ease; }
+
+/* Falling embers for wrong answers */
+.ember{
+  position:absolute;top:-8vh;width:12px;height:28px;border-radius:50% 50% 60% 60%;
+  background:
+    radial-gradient(ellipse at 50% 35%, #ffd166 0%, #ff9f1a 45%, rgba(0,0,0,0) 46%),
+    radial-gradient(ellipse at 50% 75%, #ff7a00 0%, #ff3b00 50%, #bf0000 100%);
+  box-shadow:0 0 10px rgba(255,80,0,.55),0 0 20px rgba(255,120,0,.35);
+  animation:ember-fall linear forwards,ember-flicker .12s ease-in-out infinite;opacity:.95
+}
+@keyframes ember-fall{0%{transform:translateY(-10vh) rotate(-8deg);opacity:.95}100%{transform:translateY(110vh) rotate(12deg);opacity:.1}}
+@keyframes ember-flicker{0%,100%{filter:brightness(1)}50%{filter:brightness(1.3)}}

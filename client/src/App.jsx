@@ -7,7 +7,11 @@ import Verify from "./pages/Verify";
 import Home from "./pages/home";
 import Leaderboard from "./pages/Leaderboard";
 import FakeOrNot from "./pages/FakeOrNot";
+import FakeOrNotPlay from "./pages/FakeOrNotPlay";
 import TrendingFakes from "./pages/TrendingFakes";
+import TrendingArticle from "./pages/TrendingArticle";
+import TrendingGuide from "./pages/TrendingGuide";
+import TrendingResources from "./pages/TrendingResources";
 import RequireAuth from "./components/RequireAuth";
 
 export default function App() {
@@ -55,6 +59,14 @@ export default function App() {
             }
           />
           <Route
+            path="/fake-or-not/play"
+            element={
+              <RequireAuth>
+                <FakeOrNotPlay />
+              </RequireAuth>
+            }
+          />
+          <Route
             path="/trending-fakes"
             element={
               <RequireAuth>
@@ -62,6 +74,11 @@ export default function App() {
               </RequireAuth>
             }
           />
+          <Route path="/trending-fakes" element={<RequireAuth><TrendingFakes /></RequireAuth>} />
+          <Route path="/trending-fakes/a/:id" element={<RequireAuth><TrendingArticle /></RequireAuth>} />
+          <Route path="/trending-fakes/guide" element={<RequireAuth><TrendingGuide /></RequireAuth>} />
+          <Route path="/trending-fakes/resources" element={<RequireAuth><TrendingResources /></RequireAuth>} />
+
         </Routes>
       </div>
     </div>
