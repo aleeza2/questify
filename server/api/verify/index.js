@@ -1,19 +1,16 @@
-// server/api/verify/index.js
+
 import express from "express";
 import fetch from "node-fetch";
 import * as cheerio from "cheerio";
-import OpenAI from "openai";
+
 
 const router = express.Router();
 
 const PROVIDER = (process.env.AI_PROVIDER || "ollama").toLowerCase();
 const HAVE_OPENAI = !!process.env.OPENAI_API_KEY;
 
-// only create the client if we’re actually using openai
-let openaiClient = null;
-if (PROVIDER === "openai" && HAVE_OPENAI) {
-  openaiClient = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-}
+
+
 
 const OLLAMA_HOST = process.env.OLLAMA_HOST || "http://127.0.0.1:11434";
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || "llama3.1:8b";
@@ -101,7 +98,6 @@ ${text}
       answer = await callOllama(prompt);
     }
 
-    // try to parse a JSON object from the model output
     let parsed = null;
     try {
       const match = answer.match(/\{[\s\S]*\}/);
