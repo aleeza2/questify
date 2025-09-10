@@ -1,5 +1,5 @@
 // server/index.js
-import "dotenv/config";                      // <-- MUST be first
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import verifyRouter from "./api/verify/index.js";
@@ -8,7 +8,6 @@ const app = express();
 app.use(cors({ origin: true }));
 app.use(express.json());
 
-// server/index.js
 app.use((req, _res, next) => {
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
     next();
