@@ -1,87 +1,106 @@
 // src/pages/Verify.jsx
 import { useState } from "react";
+import { getUsername, isLoggedIn } from "../utils/auth";
+import { addPoints, hasBeenAwarded, markAwarded } from "../utils/points";
 
 export default function Verify() {
   const [url, setUrl] = useState("");
-  const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState(null);
 
   const handleVerify = async () => {
-    if (!url.trim()) return;
+    if (!url.trim()) {
+      setResult({ status: "invalid", message: "Scroll is empty 🧾" });
+      return;
+    }
 
     setLoading(true);
     setResult(null);
 
     try {
-      // Fake delay (like it's "analysing")
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const response = await fetch("/api/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url }),
+      });
 
-      // Fake oracle logic
-      const outcomes = [
-        { result: "real", reason: "Trusted by the sages", confidence: "92%" },
-        { result: "fake", reason: "Scroll forged by dark forces", confidence: "23%" },
-        { result: "error", reason: "The oracle could not read this scroll", confidence: null },
-      ];
-      const randomOutcome = outcomes[Math.floor(Math.random() * outcomes.length)];
+      const data = await response.json();
 
-      setResult(randomOutcome);
+      
+      if (data.status === "fake" && isLoggedIn()) {
+        const user = getUsername();
+        if (!hasBeenAwarded(user, url)) {
+          const gained = 50; 
+          const total = addPoints(user, gained);
+          markAwarded(user, url);
+          setResult({ ...data, gained, total });
+        } else {
+          setResult({
+            ...data,
+            gained: 0,
+            total: null,
+            repeat: true,
+            message: "🧙‍♂️ You already earned XP for this exact scroll.",
+          });
+        }
+      } else {
+        setResult(data);
+      }
     } catch (err) {
-      setResult({ result: "error", reason: "Something went wrong" });
+      setResult({ status: "error", message: "⚠️ The oracle could not read this scroll" });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="p-6 max-w-xl mx-auto">
-      <h1 className="text-4xl font-bold mb-4">🪶 Submit a Link for Truth</h1>
+    <div className="flex flex-col items-center justify-center min-h-screen text-center px-6">
+      <h1 className="text-4xl font-serif text-medievalBrown mb-6">
+        🪶 Submit a Link for Truth
+      </h1>
 
       <input
         type="text"
-        placeholder="Paste a link to verify..."
+        placeholder="Paste your scroll here..."
         value={url}
         onChange={(e) => setUrl(e.target.value)}
-        className="w-full px-4 py-2 border border-gray-400 rounded mb-4"
+        className="w-full max-w-lg px-4 py-2 border-2 border-medievalBrown rounded mb-4"
       />
 
       <button
         onClick={handleVerify}
         disabled={loading}
-        className="bg-medievalRed hover:bg-medievalBrown text-white px-6 py-2 rounded w-full"
+        className="px-6 py-3 bg-medievalRed text-white font-bold rounded-lg hover:bg-medievalBrown transition disabled:opacity-50"
       >
         {loading ? "🔮 Analysing..." : "⚔ Verify"}
       </button>
 
-      {/* Loading screen */}
       {loading && (
-        <div className="mt-6 p-4 bg-yellow-100 border-l-4 border-yellow-500 animate-pulse">
-          <p className="text-medievalBrown font-semibold">
-            The oracle is consulting the scrolls… please wait ⏳
-          </p>
-        </div>
+        <div className="mt-6 text-lg animate-pulse">✨ The oracle is consulting the scrolls...</div>
       )}
 
-      {/* Results */}
-      {result && !loading && (
-        <div className="mt-6 p-4 border rounded bg-white shadow text-lg">
-          <p>
-            <strong>Result:</strong>{" "}
-            {result.result === "fake"
-              ? "❌ Fake"
-              : result.result === "real"
-              ? "✅ Real"
-              : "⚠️ Error"}
-          </p>
-          {result.reason && (
-            <p>
-              <strong>Reason:</strong> {result.reason}
-            </p>
+      {result && (
+        <div className="mt-6 p-4 border rounded bg-white shadow text-lg max-w-lg text-left">
+          {result.status === "fake" && (
+            <>
+              <p>🎉 Congrats, adventurer! You spotted a fake.</p>
+              {"gained" in result && result.gained > 0 && (
+                <p className="mt-2">⚡ +{result.gained} XP awarded! {result.total != null && <>Total: <b>{result.total} XP</b></>}</p>
+              )}
+              {result.repeat && <p className="mt-2">{result.message}</p>}
+              {result.reason && <p className="mt-2 text-sm text-gray-700"><b>Reason:</b> {result.reason}</p>}
+            </>
           )}
-          {result.confidence && (
-            <p>
-              <strong>Confidence:</strong> {result.confidence}
-            </p>
+
+          {result.status === "real" && (
+            <>
+              <p>😅 Haha! That one’s legit. No XP, but nice try.</p>
+              {result.reason && <p className="mt-2 text-sm text-gray-700"><b>Reason:</b> {result.reason}</p>}
+            </>
           )}
+
+          {result.status === "invalid" && <p>❌ Invalid scroll: {result.message}</p>}
+          {result.status === "error" && <p>⚠️ {result.message}</p>}
         </div>
       )}
     </div>

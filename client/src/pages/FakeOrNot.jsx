@@ -13,15 +13,12 @@ const DAILY_COUNT = 5;
 export default function FakeOrNot() {
   const navigate = useNavigate();
 
-  // Per-user id = email stored by your fake auth
   const userId = getUsername(); // e.g., "bob@email.com"
 
   const dayKey = dayKeyOf();
 
-  // Load this user's results
   const [results, setResults] = useState(() => loadResults(userId));
 
-  // If username changes (login/logout), refresh results
   useEffect(() => {
     setResults(loadResults(userId));
   }, [userId]);

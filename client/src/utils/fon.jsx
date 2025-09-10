@@ -16,7 +16,6 @@ export const formatTime = (ms) => {
   return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}.${String(c).padStart(2, "0")}`;
 };
 
-// --- per-user storage key (normalize + encode to avoid collisions) ---
 const normalizeId = (id) =>
   String(id || "guest").trim().toLowerCase();
 const keyForUser = (userId) =>
@@ -62,7 +61,6 @@ export function buildMonthGrid(year, month /* 0-11 */) {
   return cells;
 }
 
-// Deterministic RNG from dayKey (same set for everyone that day)
 function seededRng(dayKey) {
   let h = 2166136261 >>> 0;
   for (let i = 0; i < dayKey.length; i++) {
@@ -77,7 +75,6 @@ function seededRng(dayKey) {
   };
 }
 
-// Pick `count` unique items from `pool` deterministically by `dayKey`
 export function getDailySet(dayKey, count, pool) {
   const rng = seededRng(dayKey);
   const indices = new Set();
@@ -88,7 +85,6 @@ export function getDailySet(dayKey, count, pool) {
   return [...indices].map((i) => pool[i]);
 }
 
-// Helpers to read both v0 (single) and v1 (multi) result shapes
 export function resultCorrectCount(res) {
   if (!res) return 0;
   if (typeof res.correctCount === "number") return res.correctCount;

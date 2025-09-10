@@ -1,6 +1,8 @@
 // src/App.jsx
 import { Routes, Route } from "react-router-dom";
-import Navbar from "./components/NavBar"; 
+import Navbar from "./components/NavBar";
+import BackgroundAudio from "./components/BackgroundAudio";
+
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Verify from "./pages/Verify";
@@ -17,68 +19,26 @@ import RequireAuth from "./components/RequireAuth";
 export default function App() {
   return (
     <div className="min-h-screen bg-parchment flex flex-col">
+      <BackgroundAudio />  {/* subtle looping music */}
       <Navbar />
+
       <div className="flex-grow">
         <Routes>
-          {/* Public routes */}
+          {/* Public */}
           <Route path="/" element={<Home />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
 
-          {/* Protected routes */}
-          <Route
-            path="/home"
-            element={
-              <RequireAuth>
-                <Home />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/verify"
-            element={
-              <RequireAuth>
-                <Verify />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/leaderboard"
-            element={
-              <RequireAuth>
-                <Leaderboard />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/fake-or-not"
-            element={
-              <RequireAuth>
-                <FakeOrNot />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/fake-or-not/play"
-            element={
-              <RequireAuth>
-                <FakeOrNotPlay />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/trending-fakes"
-            element={
-              <RequireAuth>
-                <TrendingFakes />
-              </RequireAuth>
-            }
-          />
+          {/* Protected */}
+          <Route path="/home" element={<RequireAuth><Home /></RequireAuth>} />
+          <Route path="/verify" element={<RequireAuth><Verify /></RequireAuth>} />
+          <Route path="/leaderboard" element={<RequireAuth><Leaderboard /></RequireAuth>} />
+          <Route path="/fake-or-not" element={<RequireAuth><FakeOrNot /></RequireAuth>} />
+          <Route path="/fake-or-not/play" element={<RequireAuth><FakeOrNotPlay /></RequireAuth>} />
           <Route path="/trending-fakes" element={<RequireAuth><TrendingFakes /></RequireAuth>} />
           <Route path="/trending-fakes/a/:id" element={<RequireAuth><TrendingArticle /></RequireAuth>} />
           <Route path="/trending-fakes/guide" element={<RequireAuth><TrendingGuide /></RequireAuth>} />
           <Route path="/trending-fakes/resources" element={<RequireAuth><TrendingResources /></RequireAuth>} />
-
         </Routes>
       </div>
     </div>

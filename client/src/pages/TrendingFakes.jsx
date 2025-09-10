@@ -90,13 +90,10 @@ export default function TrendingFakes() {
             </select>
           </div>
         </div>
-
-        {/* Main layout: hero + Just In */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Hero */}
           <div className="lg:col-span-2">
             {hero ? <HeroCard a={hero} saved={saved} onSave={toggle} /> : <EmptyState />}
-            {/* More cards below hero (first few) */}
             <div className="mt-6 grid sm:grid-cols-2 gap-4">
               {filtered.slice(1, 5).map((a) => (
                 <ArticleCard key={a.id} a={a} saved={saved} onSave={toggle} />
@@ -104,7 +101,6 @@ export default function TrendingFakes() {
             </div>
           </div>
 
-          {/* Right rail: Just In */}
           <aside className="lg:col-span-1">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-xl font-semibold">Just In</h2>

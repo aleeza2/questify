@@ -6,7 +6,6 @@ export function AuthProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
 
-  // Load from localStorage on first load
   useEffect(() => {
     const loggedIn = localStorage.getItem("isLoggedIn") === "true";
     const username = localStorage.getItem("username");

@@ -4,10 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 🌿 Global Styling */
-
-
-/* Global parchment background */
 body {
   @apply min-h-screen bg-parchment text-medievalBrown font-serif;
   background-image: url("https://www.transparenttextures.com/patterns/aged-paper.png");
@@ -15,11 +11,9 @@ body {
   background-repeat: repeat;
 }
 
-/* BG pulse on right/wrong (affects parchment only) */
 body.bg-pulse-green { background-color: #d1fae5 !important; transition: background-color 180ms ease; }
 body.bg-pulse-red   { background-color: #fee2e2 !important; transition: background-color 180ms ease; }
 
-/* Falling embers for wrong answers */
 .ember{
   position:absolute;top:-8vh;width:12px;height:28px;border-radius:50% 50% 60% 60%;
   background:

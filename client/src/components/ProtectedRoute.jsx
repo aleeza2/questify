@@ -6,7 +6,6 @@ export default function ProtectedRoute({ children }) {
   const location = useLocation();
 
   if (!isLoggedIn()) {
-    // save where user wanted to go
     return <Navigate to="/signin" state={{ from: location }} replace />;
   }
 

@@ -11,7 +11,7 @@ export default function SignUp() {
   const handleSubmit = (e) => {
     e.preventDefault();
     register(email, password);
-    navigate("/verify"); // go straight to verify
+    navigate("/verify"); 
   };
 
   return (

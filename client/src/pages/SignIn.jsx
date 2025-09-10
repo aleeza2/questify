@@ -8,12 +8,12 @@ export default function SignIn() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/home"; // default after login
+  const from = location.state?.from?.pathname || "/home"; 
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    login(email, password); // save to localStorage
-    navigate(from, { replace: true }); // go back to where user came from
+    login(email, password); 
+    navigate(from, { replace: true }); 
   };
 
   return (

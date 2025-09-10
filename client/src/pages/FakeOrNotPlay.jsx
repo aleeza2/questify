@@ -12,18 +12,15 @@ const DAILY_COUNT = 5; // change to any number
 export default function FakeOrNotPlay() {
   const navigate = useNavigate();
 
-  // Use the email in localStorage as the stable per-user id
   const userId = getUsername(); // e.g., "alice@email.com"
 
   const dayKey = dayKeyOf();
 
-  // Gate if already played today for THIS user
   useEffect(() => {
     const r = loadResults(userId);
     if (r[dayKey]) navigate("/fake-or-not", { replace: true });
   }, [userId, dayKey, navigate]);
 
-  // Same set for ALL users (seeded by dayKey only)
   const items = useMemo(
     () => getDailySet(dayKey, DAILY_COUNT, MEDIA_POOL),
     [dayKey]
@@ -38,7 +35,6 @@ export default function FakeOrNotPlay() {
   // Fire rain particles on wrong
   const [embers, setEmbers] = useState([]);
 
-  // Stopwatch for the whole session
   const [elapsed, setElapsed] = useState(0);
   const timerRef = useRef(null);
   useEffect(() => {
@@ -46,7 +42,6 @@ export default function FakeOrNotPlay() {
     return () => clearInterval(timerRef.current);
   }, []);
 
-  // === Background pulse helpers (affect parchment only) ===
   function pulseBodyBackground(kind, ms = 1200) {
     const cls = kind === "success" ? "bg-pulse-green" : "bg-pulse-red";
     document.body.classList.add(cls);

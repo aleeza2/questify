@@ -6,7 +6,6 @@ export default function RequireAuth({ children }) {
   const location = useLocation();
 
   if (!isLoggedIn()) {
-    // Save the page they wanted in "state"
     return <Navigate to="/signin" state={{ from: location }} replace />;
   }
 
